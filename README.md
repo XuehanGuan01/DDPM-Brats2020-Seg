@@ -1,6 +1,6 @@
 ## Paper Abstract
 
-Diffusion models have shown impressive performance for generative modelling of images. In this paper, we present a novel semantic segmentation method based on diffusion models. By modifying the training and sampling scheme, we show that diffusion models can perform lesion segmentation of medical images. To generate an image specific segmentation, we train the model on the ground truth segmentation, and use the image as a prior during training and in every step during the sampling process. With the given stochastic sampling process, we can generate a distribution of segmentation masks. This property allows us to compute pixel-wise uncertainty maps of the segmentation, and allows an implicit ensemble of segmentations that increases the segmentation performance. We evaluate our method on the BRATS2020 dataset for brain tumor segmentation. Compared to state-of-the-art segmentation models, our approach yields good segmentation results and, additionally, detailed uncertainty maps.
+Diffusion models have demonstrated exceptional performance in image generation modeling. This paper proposes a novel semantic segmentation method based on diffusion models. By modifying the training and sampling schemes, we demonstrate that diffusion models can be applied to lesion segmentation in medical images. To generate segmentation results for specific images, we use real segmentation labels as targets during training and incorporate the original images as prior information in both the training and sampling processes. Due to the stochastic nature of the sampling process, we can generate a distribution of segmentation masks. This characteristic allows us to compute pixel-wise uncertainty maps for segmentation and enhance segmentation performance through implicit ensemble methods by integrating multiple segmentation results. We evaluate this method on the BRATS2020 dataset, and the results show not only excellent segmentation performance but also detailed uncertainty maps.
 
 
 ## Data
@@ -11,21 +11,21 @@ For our dataloader, which can be found in the file *guided_diffusion/bratsloader
 ```
 data
 └───training
-│   └───slice0001
-│       │   t1.nii.gz
-│       │   t2.nii.gz
-│       │   flair.nii.gz
-│       │   t1ce.nii.gz
-│       │   seg.nii.gz
-│   └───slice0002
+│   └───BraTS20_Training_333
+│       │   BraTS20_Training_333_flair.nii.gz
+│       │   BraTS20_Training_333_seg.nii.gz
+│       │   BraTS20_Training_333_t1.nii.gz
+│       │   BraTS20_Training_333_t1ce.nii.gz
+│       │   BraTS20_Training_333_t2.nii.gz
+│   └───BraTS20_Training_334
 │       │  ...
 └───testing
-│   └───slice1000
-│       │   t1.nii.gz
-│       │   t2.nii.gz
-│       │   flair.nii.gz
-│       │   t1ce.nii.gz
-│   └───slice1001
+│   └───BraTS20_Training_335
+│       │   BraTS20_Training_335_flair.nii.gz
+│       │   BraTS20_Training_335_t1.nii.gz
+│       │   BraTS20_Training_335_t1ce.nii.gz
+│       │   BraTS20_Training_335_t2.nii.gz
+│   └───BraTS20_Training_336
 │       │  ...
 
 ```
@@ -47,7 +47,7 @@ To train the segmentation model, run
 ```
 python3 scripts/segmentation_train.py --data_dir ./data/training $TRAIN_FLAGS $MODEL_FLAGS $DIFFUSION_FLAGS
 ```
-The model will be saved in the *results* folder.
+The model will be saved in the *model* folder.
 For sampling an ensemble of 5 segmentation masks with the DDPM approach, run:
 
 ```
@@ -55,16 +55,4 @@ python scripts/segmentation_sample.py  --data_dir ./data/testing  --model_path .
 ```
 The generated segmentation masks will be stored in the *results* folder. A visualization of the sampling process is done using [Visdom](https://github.com/fossasia/visdom).
 
-## Citation
-If you use this code, please cite
-
-```
-@misc{wolleb2021diffusion,
-      title={Diffusion Models for Implicit Image Segmentation Ensembles}, 
-      author={Julia Wolleb and Robin Sandkühler and Florentin Bieder and Philippe Valmaggia and Philippe C. Cattin},
-      year={2021},
-      eprint={2112.03145},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
 ```
